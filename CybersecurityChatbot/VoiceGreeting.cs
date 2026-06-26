@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Media;
+using System;
+using System.Runtime.InteropServices;
+using System.Media;
 
 namespace CybersecurityChatbot
 {
@@ -8,21 +11,14 @@ namespace CybersecurityChatbot
     {
         public static void PlayGreeting()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            string path = System.IO.Path.Combine(
+    AppDomain.CurrentDomain.BaseDirectory,
+    "Waveroom Online Record Sun Apr 12 2026 18_7_8 microphone.wav");
+
+            using (SoundPlayer player = new SoundPlayer(path))
             {
-                try // the wav sound will play
-                {
-                    using (SoundPlayer player = new SoundPlayer(
-                        @"C:\Users\Student\source\repos\Cybersecurity Awareness Bot\Cybersecurity Awareness Bot\Waveroom Online Record Sun Apr 12 2026 18_7_8 microphone.wav"))
-                    {
-                        player.Load();
-                        player.PlaySync();
-                    }
-                }
-                catch
-                {
-                    Console.WriteLine("Voice greeting could not be played.");
-                }
+                player.Load();
+                player.PlaySync();
             }
         }
     }

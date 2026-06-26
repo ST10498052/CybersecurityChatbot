@@ -6,6 +6,11 @@ namespace CybersecurityChatbot
     {
         private readonly UserMemory _memory = new UserMemory();
         private string _lastTopic = string.Empty;
+        private readonly ActivityLogger _logger = new ActivityLogger();
+        private readonly TaskAssistant _taskAssistant = new TaskAssistant();
+        private readonly QuizManager _quizManager = new QuizManager();
+        private string _pendingReminderTask = string.Empty;
+        private bool _quizActive = false;
 
         public string UserName
         {
@@ -28,6 +33,75 @@ namespace CybersecurityChatbot
             if (string.IsNullOrWhiteSpace(input))
                 return "Your message was empty. Please type something. " +
                        "(Try: 'What is phishing?' or type 'menu'.)";
+
+            _logger.Log($"User asked: {input}");
+
+            if (input.StartsWith("add task ", StringComparison.OrdinalIgnoreCase))
+            {
+                string task = input.Substring(9).Trim();
+
+                _taskAssistant.AddTask(task);
+
+                // trigger reminder question
+                _pendingReminderTask = task;
+
+                return $"Task added: {task}\n\nWould you like a reminder for this task? (yes/no)";
+            }
+
+            if (input.Equals("view tasks",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return _taskAssistant.ViewTasks();
+            }
+
+            if (_quizActive)
+            {
+                string quizResponse = _quizManager.SubmitAnswer(input);
+
+                if (quizResponse.Contains("QUIZ COMPLETE"))
+                {
+                    _quizActive = false;
+                    _quizManager.Reset();
+                }
+
+                return quizResponse;
+            }
+
+            if (IsHistoryRequest(input))
+            {
+                return _logger.GetHistory();
+            }
+
+            if (input.Equals("quiz", StringComparison.OrdinalIgnoreCase))
+            {
+                _quizActive = true;
+                return _quizManager.GetNextQuestion();
+            }
+
+            // HANDLE REMINDER RESPONSE FLOW
+            if (!string.IsNullOrEmpty(_pendingReminderTask))
+            {
+                if (input.Equals("yes", StringComparison.OrdinalIgnoreCase))
+                {
+                    return "How many minutes from now should I remind you?";
+                }
+
+                if (int.TryParse(input, out int minutes))
+                {
+                    _taskAssistant.SetReminder(_pendingReminderTask, minutes);
+
+                    string task = _pendingReminderTask;
+                    _pendingReminderTask = string.Empty;
+
+                    return $"✅ Okay! I will remind you about '{task}' in {minutes} minutes.";
+                }
+
+                if (input.Equals("no", StringComparison.OrdinalIgnoreCase))
+                {
+                    _pendingReminderTask = string.Empty;
+                    return "Okay, no reminder set.";
+                }
+            }
 
             // Sentiment detection — prepend empathetic response if detected
             Sentiment sentiment = SentimentDetector.Detect(input);
@@ -67,6 +141,23 @@ namespace CybersecurityChatbot
             return string.IsNullOrEmpty(sentimentPrefix)
                 ? fallback
                 : $"{sentimentPrefix}\n\n{fallback}";
+        }
+
+        private bool IsHistoryRequest(string input)
+        {
+            string lower = input.ToLower().Trim();
+
+            return lower.Contains("history") ||
+                   lower.Contains("activity log") ||
+                   lower.Contains("show activity") ||
+                   lower.Contains("show history") ||
+                   lower.Contains("my activity") ||
+                   lower.Contains("what have i asked") ||
+                   lower.Contains("previous") ||
+                   lower.Contains("chat log") ||
+                   lower.Contains("chat history") ||
+                   lower.Contains("what is my chat history") ||
+                   lower.Contains("conversation history");
         }
 
         private string HandleFollowUp(string input)

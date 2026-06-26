@@ -6,13 +6,23 @@ namespace CybersecurityChatbot
     {
         public string UserName { get; set; } = "User";
         public string FavouriteTopic { get; set; } = string.Empty;
+        public int ConversationCount { get; set; }
+        public string LastTopic { get; set; } = string.Empty;
         public List<string> TopicsDiscussed { get; set; } = new List<string>();
+        public List<string> RemindersSet { get; set; } = new List<string>();
 
         public void RecordTopic(string topic)
         {
-            if (!TopicsDiscussed.Contains(topic))
+            if (!TopicsDiscussed.Exists(
+                t => t.Equals(topic,
+                System.StringComparison.OrdinalIgnoreCase)))
+            {
                 TopicsDiscussed.Add(topic);
+            }
+
             FavouriteTopic = topic;
+            LastTopic = topic;
+            ConversationCount++;
         }
 
         public string GetMemoryHint()

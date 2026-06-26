@@ -12,7 +12,8 @@ namespace CybersecurityChatbot
         private static readonly Dictionary<string, string> Responses =
             new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
         {
-            { "how are you",
+            
+                { "how are you",
               "I am running perfectly and ready to help keep you cyber-safe!" },
 
             { "what's your purpose",
@@ -31,11 +32,34 @@ namespace CybersecurityChatbot
             { "help",  "Type 'menu' to see all topics I can assist with." },
 
             { "menu",
-              "TOPICS YOU CAN ASK ABOUT:\n" +
-              "  1. password\n  2. phishing\n  3. safe browsing\n  4. malware\n" +
-              "  5. social engineering\n  6. two-factor\n  7. vpn\n" +
-              "  8. public wi-fi\n  9. scam\n  10. privacy\n  11. ransomware\n" +
-              "  Type 'quit' to exit." },
+              "CYBERSECURITY BOT MENU (PART 2 FEATURES)\n\n" +
+              "📚 LEARNING TOPICS:\n" +
+              "  1. password\n" +
+              "  2. phishing\n" +
+              "  3. safe browsing\n" +
+              "  4. malware\n" +
+              "  5. social engineering\n" +
+              "  6. two-factor\n" +
+              "  7. vpn\n" +
+              "  8. public wi-fi\n" +
+              "  9. scam\n" +
+              "  10. privacy\n" +
+              "  11. ransomware\n" +
+              "  12. identity theft\n" +
+              "  13. data breach\n" +
+              "  14. social media safety\n" +
+              "  15. online shopping\n\n" +
+
+              "🧠 SMART FEATURES:\n" +
+              "  • history → view conversation log\n" +
+              "  • quiz → start cybersecurity quiz\n" +
+              "  • add task <task> → add a security task\n" +
+              "  • view tasks → see your tasks\n\n" +
+
+              "💬 EXTRA COMMANDS:\n" +
+              "  • menu → show this menu\n" +
+              "  • quit / exit / bye → close chatbot"
+            },
 
             { "password",
               "PASSWORD SAFETY TIPS:\n" +
@@ -97,6 +121,21 @@ namespace CybersecurityChatbot
               "  • Never pay the ransom — it does not guarantee file recovery.\n" +
               "  • Keep your OS and software fully patched and up to date.\n" +
               "  • Use endpoint protection software with ransomware detection." },
+            {
+                "identity theft",
+                "Identity theft occurs when criminals steal your personal information and use it to commit fraud."},
+            {
+                "password manager",
+                "Password managers generate and store strong passwords securely so you don't have to remember them all."},
+            {
+                "data breach",
+                "A data breach occurs when sensitive information is exposed or stolen from an organisation."},
+            {
+                "online shopping",
+                "Always shop from reputable websites and verify HTTPS before entering payment information."},
+            {
+                "social media safety",
+                "Review your privacy settings regularly and avoid sharing sensitive personal information publicly."}
         };
 
         // Topics with multiple random responses

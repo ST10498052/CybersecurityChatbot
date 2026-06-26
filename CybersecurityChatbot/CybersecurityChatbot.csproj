@@ -8,4 +8,14 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Waveroom Online Record Sun Apr 12 2026 18_7_8 microphone.wav" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Waveroom Online Record Sun Apr 12 2026 18_7_8 microphone.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

@@ -25,10 +25,20 @@ namespace CybersecurityChatbot
 
         public static Sentiment Detect(string input)
         {
+            if (string.IsNullOrWhiteSpace(input))
+                return Sentiment.Neutral;
+
             foreach (var entry in Keywords)
+            {
                 foreach (var word in entry.Value)
-                    if (input.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    if (input.IndexOf(word,
+                        StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
                         return entry.Key;
+                    }
+                }
+            }
 
             return Sentiment.Neutral;
         }
